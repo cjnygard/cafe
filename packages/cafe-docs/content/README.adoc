@@ -1,0 +1,977 @@
+// Copyright 2019 Cengage Learning, Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// End license text.
+
+= Why CAFe?
+
+Common Analytics Framework for Eventing (CAFe) provides a pattern for implementing client-side eventing, as well as the back-end analytics infrastructure for reliably capturing and processing the event data.
+CAFe is similar in function to Google Tag Manager (GTM), while not suffering from data loss due to common ad-blocker software.
+
+Some general guidelines are included to help you decide which approach is most appropriate for your project.
+
+== Solution Comparison
+
+There are pros and cons, strengths and weaknesses, with each approach that must be considered relative to the requirements of your project.
+The table below provides a comparison of the two solutions that should be considered when choosing a solution.
+
+[cols="1,2,2",options="header"]
+|===
+|Factor
+|GTM
+|CAFe
+
+|Accuracy of data capture
+|GTM can be blocked via ad-blocking browser plugins and other web security solutions.
+For example, our research has suggested that approximately 5% of all traffic in the HigherEd space is not captured due to this limitation (the number may be higher for K12).
+If accuracy in the event capture is needed for your project, GTM is not a viable solution.
+
+An example of where this solution would not be appropriate is if there is a requirement to track time in course, or on activity, which will be displayed back to the instructor and/or student.
+
+Another example might be when the data is needed for financial calculations.
+
+|CAFe is accurate relative to the level of care that has been taken to implement some level of error handling and retries on failures.
+When a high-degree of accuracy is required in the resulting event set, CAFe is the recommended solution.
+
+If the data is going to for financial calculations, royalty info, etc., then this solution should probably be considered a requirement.
+
+|Data analysis
+|GTM can publish event data to Google Analytics 360, making it possible to combine that data with the standard session/user/hit data captured via that solution.
+This can be useful if you already use Analytics 360 to build custom reports/dashboards.
+
+Once available in Analytics 360, this data can also be sync'd to Google Cloud Platform's BigQuery.
+From there it can then be analyzed or ingested into other analytics platforms.
+
+With this approach, the expected delay between when an event occurs and when it will be available for analysis in BigQuery is approximately 24-48 hours (https://support.google.com/analytics/answer/7084038?hl=en).
+
+|CAFe event data is persisted to Amazon S3 from where it is then processed by the AWS Lambda functions.
+
+With this approach, the expected delay between when an event occurs and when it is processed by Lambda is approximately 15 minutes.
+
+|Overall ease of implementation
+|GTM, with a browser-based workspace editor, a rich set of prebuilt event triggers, and dataLayer handler, can facilitate the overall ease of the implementation for an experienced user.
+There is a fairly significant learning curve for someone who has no experience with the platform due to the complexity of the offering.
+(see version control below)
+|CAFe does not provide all the whistles and bells that GTM does in terms of prebuilt event triggers and dataLayer management which means that some level of infrastructure has to be developed from scratch to capture and publish events.
+However, this can also lend itself to a certain simplicity to the implementation.
+(see version control below)
+
+|Capture of page views
+|GTM supports a pre-built "Page View" trigger to capture page views
+|CAFe requires implementing a "page view" activity event
+
+|Capture of custom events
+|GTM supports the capture of custom events via a "Custom Event" event trigger, in combination with a dataLayer handler that allows for the capture and management of contextual data points surrounding the event.
+|CAFe supports custom events via the use of the `/activity` endpoint.
+Standard contextual data for each event is captured via pre-defined fields in the event schema, and additional data points can be captured as key/value pairs via tags.
+
+|Capture of profile data (device, geolocation)
+|GTM captures profile data such as device and geo-location attributes by default on all hits
+|CAFe provides an endpoint that profile data can be published to on an as-needed-basis (for example, at the start of a session)
+
+This data may be classified as PII data and separating the data streams allows different data retention policies and compliance policies to be applied.
+
+|Version Control
+|GTM has a built in versioning system with rollback capabilities.
+It also provides an export/import feature which could be utilized to promote changes from one environment to another.
+GTM client behavior is injected into your page at load time and may contain source code that is not part of a git versioned project.
+|The CAFe integration should be included as part of your platform's version control implementation.
+
+|===
+
+
+== Overview
+
+CAFe supports gathering client-side events, providing similar functionality as Google Tag Manager.
+
+
+Regardless of which solution is utilized for your project, there are some standard requirements and best practices that we recommend in order to make that event data easily consumable in a downstream analytics system.
+
+In the following sections, we discuss guidelines and implementation suggestions in the context of both CAFe and GTM.
+This illustrates the architecture and features of CAFe in terms of the relatively well-known GTM system.
+
+=== Event Definition Standards
+
+All client-side events should adhere to the following standard requirements and best practices.
+
+=== Event Category/Action
+
+Every event must have a well-defined event category and action:
+
+[cols="1,3",options="header"]
+|===
+
+|Type
+|Description
+
+|Event Category
+|The event category should identify the context and/or type of event (examples would include an identifier for the specific app/component where the event occurred such as "login", "user-profile" or "navbar").
+
+|Event Action
+|The event action should identify the interaction that triggers the event (examples would include "update", "view", "watch", or "click").
+
+|===
+
+* In GTM, these values should be captured in the eventCategory and eventAction data layer variables respectively and added to corresponding Event field names when published to Universal Analytics.
+* In CAFe, these values should be captured in the eventCategory and eventAction fields on the activity schema.
+
+[NOTE]
+====
+Event category and action values must be identifier-like, alphanumeric (plus hyphens).
+camelCase is preferred.
+No whitespace.
+====
+
+
+== Event Timestamp
+
+Every event must be accompanied by an event timestamp that reflects the local time on the user's machine, including timezone.
+
+For interoperability, this timestamp should adhere to the ISO 8601 Internet Date/Time Format (https://tools.ietf.org/html/rfc3339#section-5.6).
+
+Specifically timestamps look like this `2018-01-21T23:39:43.123-08:00`
+
+See `Client-Side Eventing Timestamp Requirements` for further details and for sample Javascript code that can be used to generate the timestamp in the required format.
+
+== Event Session Identifier
+
+Every event must include a session identifier.
+
+* In GTM, the visitId field added by Universal Analytics is acceptable although a platform-specific session identifier can also be captured/provided if applicable.
+* In CAFe, a session identifier applicable to the implementation must be provided in a sessionId field on the activity schema.
+
+[NOTE]
+====
+The session identifier should be a unique value generated whenever the client-side application code is initialized in the browser.
+
+If a user refreshes the application or opens it in a new tab, a new session identifier should be generated and provided on subsequent events within that browser window.
+====
+
+
+This client-side "session" identifier is utilized for a couple of purposes:
+
+* In the scenario that the implementation also captures and publishes profile data (device and geolocation data) to the CAFe "profile" endpoint, that profile data should be associated with the same client-side session identifier, thereby enabling the two datasets to be joined together.
+
+* It also provides insights into how the application is accessed and, in particular, can be used to understand whether users are interacting with the application concurrently in multiple locations (separate browsers, separate tabs).
+
+See `Client-Side Eventing UUID Generation` for further details and sample Javascript code to generate a reasonably unique session identifier.
+
+== Event Identifier
+
+Every event must include a unique event identifier.
+
+* In GTM, the combination of visitId plus hits.hitNumber fields added by Universal Analytics is acceptable
+* In CAFe, an event identifier should be generated and supplied in the provided eventId field on the activity schema
+
+See `Client-Side Eventing UUID Generation` for further details and sample Javascript code to generate a reasonably unique event identifier.
+
+== Platform & Environment
+
+Every event must be accompanied by an identifier for the platform generating the event and its environment.
+
+In some cases, it may also be applicable to capture the same details for platform that hosts the app/component generating the event, as well as for the identity and access management system for the user.
+
+[cols="1,4,1",options="header"]
+|===
+|Type
+|Description
+|Required
+
+|productPlatform
+|The platform/app that is generating the event (`dashboard`, `user-profile`, `admin`, etc)
+|Always
+
+|productEnvironment
+|The environment of the platform/app generating the event (`dev`, `int`, `qa`, `stage`, etc)
+|Always
+
+|hostPlatform
+|The platform/app that hosts the app/component generating the event
+|When applicable
+
+|hostEnvironment
+|The environment of the platform/app that hosts the app/component generating the event (`dev`, `int`, `qa`, `stage`, etc)
+|When applicable
+
+|userPlatform
+|The identity and access management system in which the user can be resolved.
+|When applicable
+
+|userEnvironment
+|The environment of identity and access management system in which the user can be resolved (`dev`, `int`, `qa`, `stage`, etc)
+|When applicable
+|===
+
+* In GTM, data layer variables should be created and populated for each of the applicable values above.
+* In CAFe, predefined fields are provided for each of the above on the activity schema
+
+== User Identifier
+
+In general, a user identifier should be provided for all user interaction events.
+
+[NOTE]
+====
+The supplied user identifier must not be something that can be construed as personally identifiable information (PII).
+====
+
+* In GTM, the user identifier should be supplied in a data layer variable appropriately named (ie, userSSOGUID)
+* In CAFe, the user identifier should be supplied in the provided userId field on the activity schema
+
+== Additional Contextual Data
+
+In addition to category and action, as well as the standard contextual data points outlined above, there may be cases were additional contextual data is needed/useful.
+This can vary depending on the application or industry, and must be defined on a case-by-case basis.
+
+Common examples from the education industry might include:
+
+[cols="1,3",options="header"]
+|===
+|Name
+|Description
+
+|eISBN
+|For events that take place within the context of a specific product, the "eISBN" or component ISBN of the product
+
+|coreTextISBN
+|For events that take place within the context of a specific product, the core text or "title" ISBN of the product
+
+|contextId
+|For events that take place in the context of a course section, the contextId (typically, the course key)
+
+|activityId
+|For events that take place in the context of an activity, an identifier for the activity (for example, an activity identifier)
+
+|activityNodeId
+|For events that take place in the context of an activity, an identifier for the activity node (for example, a sub-activity or question identifier)
+|===
+
+
+== Client-Side Eventing Timestamp Requirements
+
+In general, a timestamp reflecting the local time on the user's machine should be captured for each event and included in a custom dimension.
+For interoperability, this timestamp should adhere to the ISO 8601 Internet Date/Time Format (https://tools.ietf.org/html/rfc3339#section-5.6).
+
+The following Javascript snippet provides an example of how to generate a timestamp in the required format:
+
+[source,javascript]
+----
+function getLocalDateISOString() {
+    var now = new Date();
+    var tzo = now.getTimezoneOffset();
+    var pad = function(num, len) {
+        var norm = Math.abs(Math.floor(num)).toString();
+        if (norm.length > len) {
+            return norm;
+        }
+        else {
+            var padding = '';
+            for (var i = 0; i < len - norm.length; i++) {
+                padding += '0';
+            }
+            return padding + norm;
+        }
+    };
+    return now.getFullYear().toString().concat(
+        '-', pad(now.getMonth() + 1, 2),
+        '-', pad(now.getDate(), 2),
+        'T', pad(now.getHours(), 2),
+        ':', pad(now.getMinutes(), 2),
+        ':', pad(now.getSeconds(), 2),
+        '.', pad(now.getMilliseconds(), 3),
+        tzo < 0 ? '+' : '-', pad(Math.abs(tzo) / 60, 2),
+        ':', pad(Math.abs(tzo) % 60, 2)
+    )
+}
+----
+
+If you client application utilizes Moment.js, a data layer variable (for example, "eventLocalTime") can be set using Moment's default timestamp format:
+
+[source,javascript]
+----
+moment().format();
+----
+
+== Client-Side Eventing UUID Generation
+
+For generating unique session and event identifiers, we recommend a UUID (Type 4) generator solution.
+
+=== NPM / Node.js Solution
+
+For projects that support the use of Node Package Manager (NPM), the "UUID" package can be utilized:
+
+* https://www.npmjs.com/package/uuid
+
+=== Pure Javascript
+
+For a pure Javascript implementation, the following method can be used:
+
+[NOTE]
+====
+Note that this approach has its limitations (see source) and should only be used if a stronger solution like the "UUID" package noted above is not an option.
+====
+
+[source,javascript]
+----
+// Source: https://stackoverflow.com/a/2117523
+function uuidv4() {
+return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+return v.toString(16);
+});
+}
+----
+
+== CafeClient Demo
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.1.
+
+=== Development server
+
+Run `ng serve` for a dev server.
+
+Navigate to `http://localhost:4200/`.
+
+The app will automatically reload if you change any of the source files.
+
+=== Code scaffolding
+
+Run `ng generate component component-name` to generate a new component.
+
+You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+=== Build
+
+Run `ng build` to build the project.
+
+The build artifacts will be stored in the `dist/` directory.
+
+Use the `--prod` flag for a production build.
+
+== Running unit tests
+
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+=== Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+=== Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+== How To
+
+This section details how to use the cafe-client library and associated endpoints.
+
+[WARN]
+====
+The contract is the API, not this client, you can use this client, make your own copy etc.
+It is provided as is, and should be considered nothing more than an example, and if you do use it, you are responsible to address issues that you run into.
+The API is the contract and expectation, NOT this client.
+====
+
+[TODO]
+====
+Fix this bit.
+Show where the open-source packages are published.
+
+For further information https://docs.npmjs.com/misc/registry
+====
+
+
+=== Purpose
+
+The client eventing system is designed to produce a web client clickstream.
+It should be agnostic to what platform or source technology (e.g. React or Angular / Typescript) is used, though it has a number of dependencies.
+
+== Installation
+
+[TODO]
+====
+Fix the NPM packaging label and location.
+====
+
+The library is distributed as an ESM5/ESM2015 bundle in the NPM package '@cafe/cafe-client' on the repository https://npmjs.org/FIXME/.
+
+Assuming you are working with a node / NPM project, you should do:
+
+[source,bash]
+----
+# install library and dependencies
+npm install --save @cafe/cafe-client moment bowser fingerprintjs2@2.0.3 rxjs@6.3.3 lodash uuid
+----
+
+
+=== Simple Usage
+
+You must initialize the library somewhere near where you are initializing the rest of your application, with code similar to:
+
+[source,javascript]
+----
+import {CafeClientEventing, DefaultEventingConfiguration} from '@cafe/cafe-client'
+
+const environment = 'staging';
+
+someGlobalObject.cafeClientEventing = new CafeClientEventing(new DefaultEventingConfiguration({
+  productEnvironment: environment,
+  productPlatform: 'your-app-name',
+  apiKey: environment === 'production' ? 'assigned-production-api-key' : 'assigned-nonprod-api-key',
+  eventingEndpoint: environment === 'production'
+    ? 'https://cafe.example.com/v1'
+    : 'https://cafe.example.com/dev',
+}));
+----
+
+There are a variety of other options that can be provided, detailed below.
+
+When you want to record an event, do something like:
+
+[source,javascript]
+----
+someGlobalObject.cafeClientEventing.recordActivity({eventCategory: 'SOME_CATEGORY', eventAction: 'SOME_ACTION'});
+----
+
+And that's it.
+You should be able to see events going out periodically in the developer tools of your web browser.
+
+=== Configuration Options
+
+[cols="1,1,1,1,3",options="header"]
+|===
+|Parameter Name
+|Data Type
+|Required?
+|Default Value
+|Description
+
+|productEnvironment
+|string
+|Required
+|
+|What environment are you in (e.g. production or staging or performance)
+
+|productPlatform
+|string
+|Required
+|
+|What application is reporting (e.g. engagement-report)
+
+|eventingEndpoint
+|string
+|Required
+|
+|Assigned eventing endpoint for the environment.
+
+|loggingApiKey
+|string
+|Required
+|
+|Assigned API key for the specified endpoint.
+
+|hostEnvironment
+|string
+|Optional
+|
+|If the application is hosted (e.g.
+in an iFrame), what is the host environment?
+
+|hostPlatform
+|string
+|Optional
+|
+|If the application is hosted (e.g.
+in an iFrame), what is the host platform?
+
+|userEnvironment
+|string
+|Optional
+|
+|What environment is the user from?
+
+|userPlatform
+|string
+|Optional
+|
+|What platform is the user from?
+
+|bufferInterval
+|number
+|Optional
+|60000
+|How often are events reported, in ms.
+Note that unless you specify installOnUnloadHandler=true, closing the window will dump existing events.
+
+|maxBufferSize
+|number
+|Optional
+|100
+|The maximum buffer size of outgoing events, how many to buffer before sending them.
+
+|profileSubmissionDelay
+|number
+|Optional
+|5000
+|How long after the client is initialized should it wait before doing browser detection and sending the results.
+This prevents us from doing any high-cost work right as the app loads.
+
+|useNativeResolution
+|boolean
+|Optional
+|false
+|Report the native resolution of the device instead of the effective resolution.
+
+|useBrowserGeoLocation
+|boolean
+|Optional
+|false
+|Report latitude / longitude of the user if available.
+Will force the browser to prompt for location access, which is why this is turned off by default.
+You would have to evaluate if you want this prompt to appear to the user.
+
+|fetchIpAddress
+|boolean
+|Optional
+|false
+|Fetch the IP address of the user for profile reporting; this requires an additional round-trip to the API.
+
+|recordViewingTime
+|boolean
+|Optional
+|false
+|Periodically record that the user is on the app.
+
+|recordViewingTimeWhenWindowNotVisible
+|boolean
+|Optional
+|false
+|Don't record viewing time if the window is marked not visible (covered by another browser tab).
+
+|recordViewingTimeByUrl
+|boolean
+|Optional
+|false
+|For each increment of viewingTimeCheckInterval, record the browser URL and report time spent at each URL, subject to the resolution of viewingTimeCheckInterval.
+
+|recordViewingTimeContiguously
+|boolean
+|Optional
+|false
+|Will record two events if there appears to be a gap in window visibility between recorded events on a particular URL.
+
+|viewingTimeCheckInterval
+|number
+|Optional
+|5000
+|How often to poll focused and visible states and URL, in MS
+
+|viewingTimeRecordInterval
+|number
+|Optional
+|60000
+|After how long do we gather up intervals and report them as events, in MS.
+
+|viewingTimeRecordCategory
+|string
+|Optional
+|VIEWING_TIME
+|What category to report for viewing time recording.
+
+|attemptCompletionOnClose
+|boolean
+|Optional
+|true
+|Should the client try and send all information when the window is closed? You would have to enable installOnUnloadHandler, or call the client's flush() method yourself on window unload to make this work.
+
+|installOnUnloadHandler
+|boolean
+|Optional
+|false
+|Install an event listener for the window's 'onbeforeunload' event so that data can be sent on window close.
+
+|installOnErrorHandler
+|boolean
+|Optional
+|false
+|Override the window's onerror handler so to log errors to the API.
+Requires logErrorsToService to be enabled to make this work.
+
+|logErrorsToService
+|boolean
+|Optional
+|false
+|Log errors to the API when the API's logError method is called.
+
+|urlScrubber
+|(string) => string
+|Optional
+|CafeClientEventing.defaultUrlScrubber
+|Scrubs outgoing URLs.
+The default implementation redacts the query params '.*token' and 'jwt' in an attempt to make sure that users' identification tokens do not get recorded.
+|===
+
+=== Setting the `GlobalContext`
+
+Although it's not required, it is sometimes useful to set some global context to make calling recordActivity easier.
+This can be done by calling the client's `setGlobalContext` method.
+
+It accepts a `GlobalContext` object, which can include a `userId` value and an array of tags, both of which apply to all subsequent calls to `recordActivity`.
+This allows you to set the user's GUID when the user logs in, for instance, or add a set of tags that record the course URI that's being used, for instance.
+
+==== Calling `recordActivity`
+
+The `recordActivity` method is the primary way events are recorded.
+
+It accepts the following parameters:
+
+
+[cols="1,1,1,1,3",options="header"]
+|===
+|Parameter Name
+|Data Type
+Required?
+|Default Value
+|Description
+
+|eventCategory
+|string
+|Required
+|
+|The category of the event, e.g.
+ROUTER_NAVIGATION or SELECTED_TAB
+
+|eventAction
+|string
+|Required
+|
+|The action of the event, e.g. `clicked`
+
+|userId
+|string
+|Optional
+|undefined
+|The logged-in user's SSO GUID.
+Will be set by global context if present.
+
+|eventDuration
+|number
+|Optional
+|undefined
+|How long the event took, if known
+
+|url
+|string
+|Optional
+|window.location.href
+|The URL of the event.
+
+|tags
+|ClientEventing.ActivityTag[]
+|Optional
+|[]
+|Any tags for the event, like courseUri, activityId, etc.
+Will be appended to tags specified in the global context.
+
+|eventDate
+|Date
+|Optional
+|new Date()
+|The date of the event.
+|
+|===
+
+=== Product Platform Access Keys
+
+To call the backend analytic endpoints, an API key must be supplied via an "x-api-key" header.
+
+Each platform integrating against these endpoints will need to obtain API Keys for accessing the backend API.
+
+Also, see `Mandatory Steps` to follow to develop and deploy a new integration.
+
+==== POST /activity
+
+===== Schema JSON
+
+[source,json]
+----
+{
+    "type": "object",
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "records": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 500,
+            "items": {
+                "$ref": "https://cafe.example.com/v1/schema/activity"
+            }
+        }
+    },
+    "required": [
+        "records"
+    ],
+    "additionalProperties": false
+}
+----
+
+===== Sample Request
+
+[source,json]
+----
+{
+   "records":[
+      {
+         "messageFormatVersion":1,
+         "messageType":"ClientEventingActivity",
+         "eventTime":"2019-01-21T13:09:07.049+05:30",
+         "productEnvironment":"monitoring",
+         "productPlatform":"analytics-portal",
+         "sessionId":"5f064ec0-c58c-4165-98f2-0e0a08a13bd1",
+         "eventId":"f3ee29e2-3490-4941-b8e6-50f44ea8261f",
+         "eventCategory":"GET_REPORT",
+         "eventAction":"GET_REPORT",
+         "userSSOGUID":"af93d8a7e39f4680:-289a30c1:166e535a6fc:-10c2",
+         "eventUri":"https://analytics-portal.example.com/",
+         "tags":[
+            {
+               "key":"reportType",
+               "value":"reportType:risk-assessment:ui:v1"
+            },
+            {
+               "key":"reportUri",
+               "value":"report:risk-assessment:all"
+            }
+         ]
+      }
+   ]
+}
+----
+
+===== Sample CURL
+
+[source,bash]
+----
+curl -X POST "https://cafe.example.com/v1/activity" \
+    -H  "accept: application/json" \
+    -H  "x-api-key: VTwgEDNQDHnM8XFYx2eJckeou49MYfyZkc9mTDgW" \
+    -H  "Content-Type: application/json" \
+    -d '{"records":[{"messageFormatVersion":1,"messageType":"ClientEventingActivity","eventTime":"2019-01-21T13:09:07.049+05:30","productEnvironment":"monitoring","productPlatform":"analytics-portal","sessionId":"5f064ec0-c58c-4165-98f2-0e0a08a13bd1","eventId":"f3ee29e2-3490-4941-b8e6-50f44ea8261f","eventCategory":"GET_REPORT","eventAction":"GET_REPORT","userSSOGUID":"af93d8a7e39f4680:-289a30c1:166e535a6fc:-10c2","eventUri":"https://analytics-portal.example.com/","tags":[{"key":"reportType","value":"reportType:risk-assessment:ui:v1"},{"key":"reportUri","value":"report:risk-assessment:all"}]}]}'
+----
+
+==== GET /ip
+
+===== Result Schema JSON
+
+[source,json]
+----
+{
+    "type": "object",
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "ip": {
+            "anyOf": [
+                {
+                    "format": "ipv4",
+                    "type": "string"
+                },
+                {
+                    "format": "ipv6",
+                    "type": "string"
+                }
+            ]
+        }
+    },
+    "required": [
+        "ip"
+    ],
+    "additionalProperties": false
+}
+----
+
+===== Sample CURL
+
+[source,bash]
+----
+curl 'https://cafe.example.com/v1/ip' \
+    -H 'Accept: application/json, text/plain, */*' \
+    -H 'x-api-key: VTwgEDNQDHnM8XFYx2eJckeou49MYfyZkc9mTDgW'
+----
+
+==== POST /log
+
+===== Schema JSON
+
+[source,json]
+----
+{
+    "type": "object",
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "records": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 500,
+            "items": {
+                "$ref": "https://cafe.example.com/v1/schema/log"
+            }
+        }
+    },
+    "required": [
+        "records"
+    ],
+    "additionalProperties": false
+}
+----
+
+===== Sample Request
+
+[source,json]
+----
+{
+   "records":[
+      {
+         "messageFormatVersion":1,
+         "messageType":"ClientEventingLog",
+         "logTime":"2019-01-21T13:09:07.049+05:30",
+         "productEnvironment":"monitoring",
+         "productPlatform":"analytics-portal",
+         "sessionId":"5f064ec0-c58c-4165-98f2-0e0a08a13bd1",
+         "logLevel":"Debug",
+         "logMessage":"THIS IS A DEBUG MESSAGE",
+         "eventUri":"https://analytics-portal.example.com/"
+      }
+   ]
+}
+----
+
+===== Sample CURL
+
+[source,bash]
+----
+curl 'https://cafe.example.com/v1/log'  \
+    -H 'Accept: application/json'  \
+    -H 'x-api-key: VTwgEDNQDHnM8XFYx2eJckeou49MYfyZkc9mTDgW'  \
+    -H 'Content-Type: application/json'  \
+    --data '{"records":[{"messageFormatVersion":1,"messageType":"ClientEventingLog","logTime":"2019-01-21T13:09:07.049+05:30","productEnvironment":"monitoring","productPlatform":"analytics-portal","sessionId":"5f064ec0-c58c-4165-98f2-0e0a08a13bd1","logLevel":"Debug","logMessage":"THIS IS A DEBUG MESSAGE","eventUri":"https://analytics-portal.example.com/"}]}'
+----
+
+==== POST /profile
+
+===== Schema JSON
+[source,json]
+----
+{
+    "type": "object",
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "properties": {
+        "records": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 500,
+            "items": {
+                "$ref": "https://cafe.example.com/v1/schema/profile"
+            }
+        }
+    },
+    "required": [
+        "records"
+    ],
+    "additionalProperties": false
+}
+----
+
+
+===== Sample Request
+
+[source,json]
+----
+{
+   "records":[
+      {
+         "messageFormatVersion":1,
+         "messageType":"ClientEventingProfile",
+         "productEnvironment":"monitoring",
+         "productPlatform":"analytics-portal",
+         "sessionId":"853c6b4e-382d-470d-b3aa-3552907d2c59",
+         "eventTime":"2019-01-21T11:54:37.805-08:00",
+         "platform":{
+            "userAgentString":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:64.0) Gecko/20100101 Firefox/64.0",
+            "browserFingerprint":"d83849b0aac5eb545cb4c304493b8740",
+            "browserName":"Firefox",
+            "browserVersion":"64.0",
+            "osName":"macOS",
+            "osVersion":"10.13",
+            "engineName":"Gecko",
+            "platformType":"desktop",
+            "platformVendor":"Apple",
+            "language":"en-US",
+            "screenResolution":{
+               "width":3008,
+               "height":1692
+            }
+         },
+         "location":{
+            "timeZone":"America/Los_Angeles",
+            "ipAddress":"204.98.74.133"
+         }
+      }
+   ]
+}
+----
+
+===== Sample CURL
+
+[source,bash]
+----
+curl 'https://cafe.example.com/v1/profile'  \
+    -H 'Accept: application/json'  \
+    -H 'x-api-key: VTwgEDNQDHnM8XFYx2eJckeou49MYfyZkc9mTDgW'  \
+    -H 'Content-Type: application/json'  \
+    --data '{"records":[{"messageFormatVersion":1,"messageType":"ClientEventingProfile","productEnvironment":"monitoring","productPlatform":"analytics-portal","sessionId":"853c6b4e-382d-470d-b3aa-3552907d2c59","eventTime":"2019-01-21T11:54:37.805-08:00","platform":{"userAgentString":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:64.0) Gecko/20100101 Firefox/64.0","browserFingerprint":"d83849b0aac5eb545cb4c304493b8740","browserName":"Firefox","browserVersion":"64.0","osName":"macOS","osVersion":"10.13","engineName":"Gecko","platformType":"desktop","platformVendor":"Apple","language":"en-US","screenResolution":{"width":3008,"height":1692}},"location":{"timeZone":"America/Los_Angeles","ipAddress":"204.98.74.133"}}]}'
+----
+
+
+== Troubleshooting
+
+=== Summary
+
+When integrating with the CAFe endpoints, there are two approaches that teams performing the integration can use to validate the events.
+
+* Review browser network requests
+* Search the S3 bucket for the data in question
+
+Each of these methods will be documented below.
+
+In addition, CAFe endpoints emit logging messages when errors are encountered.
+It is beyond the scope of this project to implement centralized logging for the API Gateway components.
+
+=== Browser Network Requests
+
+For events captured client-side, a first level of validation can be done by monitoring the network request to the endpoint via the browser's developer tools.
+
+Attention should be paid to the following:
+
+* Was the request made when expected (ie, upon the defined trigger)?
+* What was the request response?
+** A 200 response indicates a successful post
+** A 400 response indicates a problem with the request body (including event schema validation failures)
+** A 403 response indicates a problem with the request authentication (AWS 'x-api-key' is missing/incorrect)
+** (Other responses may be applicable)
+* Does the request body match the requirements?
+** Validate that the event category and action match the specification
+** Validate that all the required contextual data for the given event category/action are present
+* Validate that the Client-Side Eventing Guidelines are adhered to

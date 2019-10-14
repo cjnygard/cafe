@@ -1,0 +1,41 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "paths": {
+      "cafe-client": [
+        "dist/cafe-client"
+      ],
+      "cafe-client/*": [
+        "dist/cafe-client/*"
+      ],
+      "cafe-angular-client": [
+        "dist/cafe-angular-client"
+      ],
+      "cafe-angular-client/*": [
+        "dist/cafe-angular-client/*"
+      ],
+      "@cafe/cafe-version-page/*": [
+        "node_modules/@cafe/cafe-version-page/dist/*"
+      ],
+      "@cafe/cafe-model/*": [
+        "node_modules/@cafe/cafe-model/dist/*"
+      ],
+      "@cafe/cafe-environment/*": [
+        "node_modules/@cafe/cafe-environment/dist/*"
+      ],
+      "@cafe/cafe-build-utilities/*": [
+        "node_modules/@cafe/cafe-build-utilities/dist/*"
+      ],
+      "@cafe/cafe-client/*": [
+        "node_modules/@cafe/cafe-client/dist/*"
+      ],
+      "@cafe/cafe-angular-client/*": [
+        "node_modules/@cafe/cafe-angular-client/dist/*"
+      ]
+    }
+  }
+}

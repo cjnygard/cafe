@@ -1,0 +1,17 @@
+{
+  "records": [
+    {
+      "messageFormatVersion": 1,
+      "messageType": "ClientEventingActivity",
+      "eventTime": "2019-10-06T19:22:35.361-04:00",
+      "productEnvironment": "staging",
+      "productPlatform": "analytics-portal",
+      "sessionId": "a9afd2df-b574-4528-98c9-2db48d109180",
+      "eventId": "edff5cfb-17d3-4a20-b032-67303db82932",
+      "eventCategory": "ROUTER_NAVIGATION",
+      "eventAction": "START_PAGE",
+      "eventUri": "http://localhost:4200/",
+      "tags": []
+    }
+  ]
+}

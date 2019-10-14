@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost:4200",
+  "ssoUsername": "whoami@example.com",
+  "ssoPassword": "A123456",
+  "ssoEndpoint": "https://s-c-ws.cengage.com",
+  "authEndpoint": "https://analytics-portalapi-staging01.cengage.info/v1/authenticate",
+  "applicationName": "eventing",
+  "environmentName": "staging"
+}

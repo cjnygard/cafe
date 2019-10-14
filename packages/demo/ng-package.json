@@ -1,0 +1,14 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "./dist/cafe-angular-client",
+  "lib": {
+    "entryFile": "src/public_api.ts",
+    "umdModuleIds": {
+      "@cafe/cafe-environment": "cafe-environment",
+      "uuid": "uuid",
+      "lodash": "_",
+      "bowser": "bowser",
+      "moment": "moment"
+    }
+  }
+}

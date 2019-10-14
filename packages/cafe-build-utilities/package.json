@@ -1,0 +1,84 @@
+{
+  "name": "@cafe/cafe-build-utilities",
+  "version": "1.0.0",
+  "description": "Build script utilities for CAFe packages",
+  "author": "Ross Lodge",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "echo No prepublish steps required",
+    "prepare": "npm run build",
+  
+    "clean": "run-p clean:*",
+    "clean:node": "rimraf node_modules",
+    "clean:dist": "rimraf dist",
+    "clean:tmp": "rimraf tmp",
+    "clean:coverage": "rimraf coverage",
+  
+    "generate": "run-p generate:*",
+    "no:generate:versions": "cafe-version --path .",
+    "generate:echo": "echo generate done",
+  
+    "build": "run-s build:*",
+    "no:build:clean": "npm run clean:dist",
+    "build:generate": "npm run generate",
+    "no:build:build": "npm run tsc:build",
+    "no:build:dist": "echo npm run dist",
+  
+    "dist": "run-s dist:*",
+    "dist:clean": "rimraf dist",
+    "dist:prepare": "mkdirp dist",
+    "no:dist:copy-source": "ncp src dist",
+    "dist:copy-js": "cp *.js dist",
+    "dist:copy-package": "cp package.json dist",
+  
+    "deploy": "run-s deploy:*",
+    "deploy:build": "npm run build",
+    "deploy:dist": "npm run dist",
+    "deploy:publish": "npm publish dist",
+  
+    "postinstall": "echo No postinstall tasks",
+  
+    "test": "run-s test:*",
+    "test:generate": "npm run generate",
+    "test:test": "npm run ng:test:coverage",
+  
+    "jenkins:e2e": "run-s jenkins:e2e:*",
+    "jenkins:e2e:generate": "npm run generate",
+    "jenkins:e2e:test": "npm run cypress:jenkins"
+  
+  },
+  "bin": {
+    "cafe-version": "version.js",
+    "cafe-model": "model.js",
+    "cafe-model-oas": "modelFromOAS.js"
+  },
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "app-root-path": "^2.1.0",
+    "es6-promise": "^4.2.5",
+    "fs-extra": "^7.0.0",
+    "git-describe": "^4.0.3",
+    "json-schema-to-typescript": "^5.7.0",
+    "lodash": "^4.17.15",
+    "minimist": "^1.2.0",
+    "rimraf": "^3.0.0",
+    "sync-request": "^6.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://nexus3.cengage.info/repository/analytics-hosted-npm/"
+  },
+  "devDependencies": {
+    "@types/jasmine": "~2.8.8",
+    "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.0",
+    "codelyzer": "^5.1.2"
+  }
+}

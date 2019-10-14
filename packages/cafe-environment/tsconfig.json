@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "./src"
+  ],
+  "compilerOptions": {
+    "outDir": "./dist",
+    "paths": {
+      "@cafe/cafe-build-utilities/*": [
+        "node_modules/@cafe/cafe-build-utilities/dist/*"
+      ]
+    }
+  }
+}

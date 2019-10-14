@@ -1,0 +1,96 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "bootstrap": "lerna bootstrap --hoist --nohoist=*cypress* --nohoist=@bahmutov/add-typescript-to-cypress --nohoist=codelyzer",
+    "ci:bootstrap": "lerna bootstrap --hoist --nohoist=*cypress* --nohoist=@bahmutov/add-typescript-to-cypress  --nohoist=codelyzer --concurrency=1",
+    "clean": "lerna clean",
+    "pretest": "eslint packages"
+  },
+  "packageScripts": {
+    "comment": "echo These are standard scripts for modules",
+    "prepublish": "echo No prepublish steps required",
+    "prepare": "npm run build",
+  
+    "clean": "npx npm-run-all clean:*",
+    "clean:node": "npx rimraf node_modules",
+    "clean:dist": "npx rimraf dist",
+    "clean:tmp": "npx rimraf tmp",
+    "clean:coverage": "npx rimraf coverage",
+  
+    "generate": "npx npm-run-all generate:*",
+    "generate:versions": "npx cafe-version --path .",
+  
+    "build": "npx npm-run-all build:*",
+    "build:clean": "npm run clean:dist",
+    "build:generate": "npm run generate",
+    "build:build": "npm run tsc:build",
+    "build:dist": "echo npm run dist",
+  
+    "dist": "npx npm-run-all dist:*",
+    "dist:clean": "npx rimraf dist",
+    "dist:prepare": "npx mkdirp dist",
+    "dist:copy-source": "npx ncp src dist",
+    "dist:copy-js": "cp *.js dist",
+    "dist:copy-package": "cp package.json dist",
+  
+    "deploy": "npx npm-run-all deploy:*",
+    "deploy:build": "npm run build",
+    "deploy:dist": "npm run dist",
+    "deploy:publish": "npm publish dist",
+  
+    "postinstall": "echo No postinstall tasks",
+  
+    "start": "npx npm-run-all start:*",
+    "start:generate": "npm run generate",
+    "start:serve": "npm run ng:start",
+  
+    "e2e": "npx npm-run-all e2e:test:* --continue-on-error",
+    "e2e:test:build": "npm run build",
+    "e2e:test:start": "npm run e2e:background:start",
+    "e2e:test:run": "npm run cypress:run",
+    "e2e:test:terminate": "npm run e2e:background:terminate",
+    "e2e:start": "npx npm-run-all e2e:start:*",
+    "e2e:start:build": "npm run build",
+    "e2e:start:serve": "ng serve --watch false --live-reload false",
+    "e2e:background:start": "ng serve --watch false --live-reload false &",
+    "e2e:background:terminate": "echo \"killing $(lsof -t -i:4200)\" && kill $(lsof -t -i:4200)",
+  
+    "test": "npx npm-run-all test:*",
+    "test:generate": "npm run generate",
+    "test:test": "npm run ng:test:coverage",
+  
+    "jenkins:e2e": "npx npm-run-all jenkins:e2e:*",
+    "jenkins:e2e:generate": "npm run generate",
+    "jenkins:e2e:test": "npm run cypress:jenkins",
+  
+    "tsc:build": "tsc --build tsconfig.json",
+    "tsc:build.trace": "tsc --traceResolution --build tsconfig.json",
+  
+    "ng:build": "ng build",
+    "ng:start": "ng serve",
+    "ng:test:test": "ng test",
+    "ng:test:watch": "ng test --watch",
+    "ng:test:coverage": "ng test --code-coverage",
+  
+    "lint": "ng lint",
+  
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:jenkins": "cypress run --browser chrome --reporter junit --reporter-options 'mochaFile=tmp/e2e-test-output.xml,toConsole=true'"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.8",
+    "lerna": "^3.16.4",
+    "node-sass": "^4.12.0",
+    "typescript": "3.5.3"
+  },
+  "dependencies": {
+    "nyc": "^14.1.1"
+  },
+  "removed": {
+    "codelyzer": "^4.5.0",
+    "@angular/http": "~7.2.15",
+    "nvm": "0.0.4"
+  }
+}

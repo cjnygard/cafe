@@ -1,0 +1,94 @@
+{
+  "name": "@cafe/cafe-client",
+  "version": "1.1.2",
+  "main": "dist/public_api.js",
+  "typings": "dist/public_api.d.ts",
+  "scripts": {
+    "prepublish": "echo No prepublish steps required",
+    "prepare": "npm run build",
+  
+    "clean": "run-p clean:*",
+    "clean:node": "rimraf node_modules",
+    "clean:dist": "rimraf dist",
+    "clean:tmp": "rimraf tmp",
+    "clean:coverage": "rimraf coverage",
+    "clean:env": "rimraf src/environments",
+  
+    "generate": "run-p generate:*",
+    "generate:versions": "cafe-version --path .",
+  
+    "build": "run-s build:*",
+    "build:clean": "npm run clean:dist",
+    "build:generate": "npm run generate",
+    "build:build": "npm run tsc:build",
+    "build:dist": "npm run dist",
+  
+    "dist": "run-s dist:*",
+    "no:dist:clean": "rimraf dist",
+    "no:dist:prepare": "mkdirp dist",
+    "no:dist:copy-source": "ncp src dist",
+    "no:dist:copy-js": "cp *.js dist",
+    "dist:copy-package": "cp package.json dist",
+  
+    "deploy": "run-s deploy:*",
+    "deploy:build": "npm run build",
+    "deploy:dist": "npm run dist",
+    "deploy:publish": "npm publish dist",
+  
+    "postinstall": "echo No postinstall tasks",
+  
+    "e2e": "run-s e2e:test:* --continue-on-error",
+    "e2e:test:build": "npm run build",
+    "e2e:test:run": "npm run test:test",
+  
+    "test": "run-s test:*",
+    "test:generate": "npm run generate",
+    "test:test": "npm run jest:test:coverage",
+  
+    "jenkins:e2e": "run-s jenkins:e2e:*",
+    "jenkins:e2e:generate": "npm run generate",
+    "jenkins:e2e:test": "npm run test:test",
+  
+    "tsc:build": "tsc --build tsconfig.json",
+    "tsc:build.trace": "tsc --traceResolution --build tsconfig.json",
+    
+    "jest": "run-s jest:*",
+    "jest:test:coverage": "echo jest test coverage here"
+  },
+  "directories": {
+    "lib": "dist",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@cafe/cafe-model": "~1.1.2",
+    "bowser": "^2.6.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "rxjs": "~6.5.3",
+    "uuid": "^3.3.3"
+  },
+  "peerDependencies": {
+    "bowser": "^2.6.1",
+    "fingerprintjs2": "^2.1.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "rxjs": "~6.3.3",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@cafe/cafe-build-utilities": "~1.0.0",
+    "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.0",
+    "tslint": "~5.20.0",
+    "typescript": "3.5.3",
+    "codelyzer": "^5.1.2"
+  },
+  "publishConfig": {
+    "registry": "https://nexus3.cengage.info/repository/analytics-hosted-npm/"
+  }
+}

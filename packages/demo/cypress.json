@@ -1,0 +1,5 @@
+{
+  "env": {
+    "defaultFixture": "default-staging.json"
+  }
+}
