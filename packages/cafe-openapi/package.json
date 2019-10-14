@@ -5,6 +5,10 @@
     "prepublish": "echo No prepublish steps required",
     "prepare": "npm run build",
   
+    "maintainer-clean": "run-p maintainer-clean:*",
+    "maintainer-clean:package-lock": "rimraf package-lock.json",
+    "maintainer-clean:clean": "npm run clean",
+  
     "clean": "run-p clean:*",
     "clean:node": "rimraf node_modules",
     "clean:dist": "rimraf dist",
@@ -20,6 +24,7 @@
     "generate:schema": "run-s generate:schema:*",
     "off:generate:schema:path": "mkdirp schema",
     "off:generate:schema:base64": "for i in `jq '.components.schemas | keys[] as $k | $k' cafe.openapi.json`; do (export FILE=$(echo $i | sed -e 's/\\\"//g'); jq .components.schemas[$i] cafe.openapi.json > schema/$FILE.json; json2yaml schema/$FILE.json > schema/$FILE.yaml; for j in json yaml; do base64 -i schema/${FILE}.$j -o schema/${FILE}.$j.base64; done); done",
+    "generate:schema:echo": "echo generate complete",
   
     "build": "run-s build:*",
     "build:clean": "npm run clean:dist",
