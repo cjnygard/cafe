@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 // Copyright 2019 Cengage Learning, Inc
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +15,6 @@
 // limitations under the License.
 //
 // End license text.
-
-#! /usr/bin/env node
 
 // This generates model files from an OpenAPI 3.0 definition
 // It assumes all required objects are defined in

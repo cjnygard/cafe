@@ -1,3 +1,5 @@
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
+
 # CAFe
 
 ## Overview
@@ -113,6 +115,16 @@ GTM client behavior is injected into your page at load time and may contain sour
 
 The CAFe integration and CloudFormation scripts should be included as part of your platform's version control implementation.
 
+## Build Instructions
 
+We use `lerna` for managing a multi-package build environment in a single source tree.
+See http://lerna.js.org for more information regarding `lerna`.
+
+To build from scratch with a fresh clone, clear out the package-lock.json files so that lerna can properly link locally built packages.
+
+```bash
+npm run maintainer-clean
+npm run bootstrap
+```
 
 

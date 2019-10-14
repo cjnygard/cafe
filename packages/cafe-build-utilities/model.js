@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 // Copyright 2019 Cengage Learning, Inc
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +16,6 @@
 //
 // End license text.
 
-#! /usr/bin/env node
 
 var argv = require('minimist')(process.argv.slice(2));
 
