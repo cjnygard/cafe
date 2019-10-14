@@ -1,5 +1,3 @@
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
-
 # CAFe
 
 ## Overview
@@ -36,7 +34,7 @@ Another example might be when the data is needed for financial calculations.
 CAFe is accurate relative to the level of care that has been taken to implement some level of error handling and retries on failures.
 When a high-degree of accuracy is required in the resulting event set, CAFe is the recommended solution.
 
-If the data is going to for financial calculations, royalty info, etc., then this solution should probably be considered a requirement.
+If the data is going to be used for financial calculations, royalty info, etc., then this solution should probably be considered a requirement.
 
 ### Data analysis
 
@@ -52,9 +50,9 @@ With this approach, the expected delay between when an event occurs and when it 
 
 #### CAFe
 
-CAFe event data is persisted to Amazon S3 from where it is then processed by the AWS Lambda functions.
+CAFe event data is persisted to Amazon S3 from where it may then be processed by AWS Lambda functions.
 
-With this approach, the expected delay between when an event occurs and when it is processed by Lambda is approximately 15 minutes.
+With this approach, the expected delay between when an event occurs and when it is processed by Lambda is based on the Firehose buffering settings, which may be configured between 90sec and 15 minutes.
 
 ### Overall ease of implementation
 
@@ -99,7 +97,7 @@ GTM captures profile data such as device and geo-location attributes by default 
 
 #### CAFe
 
-CAFe provides an endpoint that profile data can be published to on an as-needed-basis (for example, at the start of a session)
+CAFe provides an endpoint to which profile data can be published on an as-needed-basis (for example, at the start of a session)
 
 This data may be classified as PII data and separating the data streams allows different data retention policies and compliance policies to be applied.
 
@@ -113,7 +111,7 @@ GTM client behavior is injected into your page at load time and may contain sour
 
 #### CAFe
 
-The CAFe integration should be included as part of your platform's version control implementation.
+The CAFe integration and CloudFormation scripts should be included as part of your platform's version control implementation.
 
 
 
