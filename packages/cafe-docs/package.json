@@ -10,7 +10,16 @@
     "prepublish": "echo No prepublish steps required",
     "prepare": "npm run build",
     "start": "gatsby develop",
-    "build": "gatsby build --prefix-paths"
+    "build": "gatsby build --prefix-paths",
+  
+    "maintainer-clean": "run-s maintainer-clean:*",
+    "maintainer-clean:package-lock": "rimraf package-lock.json",
+    "maintainer-clean:clean": "npm run clean",
+  
+    "clean": "run-s clean:*",
+    "clean:public": "rimraf public",
+    "clean:cache": "rimraf .cache",
+    "clean:node": "rimraf node_modules"
   },
   "dependencies": {
     "@babel/plugin-proposal-export-default-from": "^7.5.2",

@@ -7,22 +7,22 @@
     "prepublish": "echo No prepublish steps required",
     "prepare": "npm run build",
   
-    "maintainer-clean": "run-p maintainer-clean:*",
+    "maintainer-clean": "run-s maintainer-clean:*",
     "maintainer-clean:package-lock": "rimraf package-lock.json",
     "maintainer-clean:clean": "npm run clean",
   
-    "clean": "run-p clean:*",
-    "clean:node": "rimraf node_modules",
+    "clean": "run-s clean:*",
     "clean:dist": "rimraf dist",
     "clean:tmp": "rimraf tmp",
     "clean:coverage": "rimraf coverage",
     "clean:generated": "rimraf src/lib/cafe-api.model.ts",
     "clean:env": "rimraf src/environments",
+    "clean:node": "rimraf node_modules",
   
     "generate": "run-p generate:*",
     "generate:versions": "cafe-version --path .",
     "no:generate:model": "cafe-model --path . --local --modelName='cafe'  --inputDirectory='../aws/api-gateway/cafe-sharedmodels'  --baseUri='https://analytics-client-eventing-staging01.cengage.info/v1/'--apiName='client-eventing-api' --outputFile='src/lib/cafe-api.model.ts' --namespace=ClientEventing",
-    "generate:oas": "cafe-model-oas --path . --local --modelName='cafe'  --openapiPath='./node_modules/@cafe/cafe-openapi/dist/cafe.openapi.json' --outputFile='src/lib/cafe-api.model.ts' --namespace=ClientEventing",
+    "generate:oas": "cafe-model-oas --path . --local --modelName='cafe'  --openapiPath='./node_modules/@cafe/cafe-openapi/cafe.openapi.json' --outputFile='src/lib/cafe-api.model.ts' --namespace=ClientEventing",
   
     "build": "run-s build:*",
     "build:clean": "npm run clean:dist",

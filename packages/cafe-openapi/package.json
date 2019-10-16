@@ -5,18 +5,18 @@
     "prepublish": "echo No prepublish steps required",
     "prepare": "npm run build",
   
-    "maintainer-clean": "run-p maintainer-clean:*",
+    "maintainer-clean": "run-s maintainer-clean:*",
     "maintainer-clean:package-lock": "rimraf package-lock.json",
     "maintainer-clean:clean": "npm run clean",
   
-    "clean": "run-p clean:*",
-    "clean:node": "rimraf node_modules",
+    "clean": "run-s clean:*",
     "clean:dist": "rimraf dist",
     "clean:tmp": "rimraf tmp",
     "clean:coverage": "rimraf coverage",
     "clean:env": "rimraf src/environments",
     "clean:base64": "rimraf *.base64",
     "clean:schema": "rimraf schema",
+    "clean:node": "rimraf node_modules",
   
     "generate": "run-p generate:*",
     "generate:versions": "cafe-version --path .",
@@ -28,15 +28,15 @@
   
     "build": "run-s build:*",
     "build:clean": "npm run clean:dist",
-    "build:generate": "npm run generate",
-    "build:build": "npm run tsc:build",
+    "off:build:generate": "npm run generate",
+    "off:build:build": "npm run tsc:build",
     "build:dist": "npm run dist",
   
     "dist": "run-s dist:*",
-    "no:dist:clean": "rimraf dist",
-    "no:dist:prepare": "mkdirp dist",
-    "no:dist:copy-source": "ncp src dist",
-    "no:dist:copy-js": "cp *.js dist",
+    "off:dist:clean": "rimraf dist",
+    "off:dist:prepare": "mkdirp dist",
+    "off:dist:copy-source": "ncp src dist",
+    "off:dist:copy-js": "cp *.js dist",
     "dist:copy-openapi": "cp cafe.openapi.json dist",
     "dist:copy-package": "cp package.json dist",
   
