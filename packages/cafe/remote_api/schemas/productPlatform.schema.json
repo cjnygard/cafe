@@ -1,0 +1,17 @@
+{
+  "type": "string",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "The application name reporting the event\nIf the product is hosted within another product, as an iFrame for example, the platform\nof the host, e.g. if the Foo product is hosted in an iframe with Bar,\nthe productPlatform would be Foo and the hostPlatform would be Bar",
+  "title": "ProductPlatform",
+  "enum": [
+    "login",
+    "profile",
+    "dashboard",
+    "cart",
+    "catalog",
+    "admin",
+    "analytics",
+    "analytics-portal"
+  ]
+}

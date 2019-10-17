@@ -1,0 +1,71 @@
+{
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "log",
+  "properties": {
+    "messageFormatVersion": {
+      "type": "number",
+      "enum": [
+        1
+      ],
+      "default": 1
+    },
+    "messageType": {
+      "type": "string",
+      "enum": [
+        "ClientEventingLog"
+      ],
+      "default": "ClientEventingLog"
+    },
+    "productPlatform": {
+      "$ref": "productPlatform.schema.json"
+    },
+    "productEnvironment": {
+      "type": "string",
+      "description": "the environment of the application reporting the event, e.g. staging",
+      "maxLength": 60,
+      "pattern": "^[\\w-]+$"
+    },
+    "eventUri": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^(([a-zA-Z][0-9a-zA-Z+\\-\\.]*:)?/{0,2}[0-9a-zA-Z;,/?:@&=+\\.\\-_!~*'()%]+)(#[0-9a-zA-Z;,/?:@&=+\\.\\-_!~*'()%]*)?$"
+    },
+    "sessionId": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^[A-Za-z0-9_\\.\\-\\/+=]+$"
+    },
+    "logTime": {
+      "type": "string",
+      "description": "The time of the event, as defined in https://tools.ietf.org/html/rfc3339#section-5.6",
+      "format": "date-time"
+    },
+    "logLevel": {
+      "type": "string",
+      "enum": [
+        "Error",
+        "Warn",
+        "Debug",
+        "Info"
+      ],
+      "default": "Error"
+    },
+    "logMessage": {
+      "type": "string",
+      "maxLength": 20000,
+      "description": "The log message"
+    }
+  },
+  "required": [
+    "messageFormatVersion",
+    "productEnvironment",
+    "productPlatform",
+    "logLevel",
+    "messageType",
+    "logMessage"
+  ],
+  "additionalProperties": false
+}

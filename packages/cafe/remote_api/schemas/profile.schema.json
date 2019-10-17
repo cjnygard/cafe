@@ -1,0 +1,204 @@
+{
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "profile",
+  "properties": {
+    "messageFormatVersion": {
+      "type": "number",
+      "enum": [
+        1
+      ],
+      "default": 1
+    },
+    "messageType": {
+      "type": "string",
+      "enum": [
+        "ClientEventingProfile"
+      ],
+      "default": "ClientEventingProfile"
+    },
+    "productPlatform": {
+      "$ref": "productPlatform.schema.json"
+    },
+    "productEnvironment": {
+      "$ref": "environment.schema.json"
+    },
+    "hostPlatform": {
+      "$ref": "productPlatform.schema.json"
+    },
+    "hostEnvironment": {
+      "$ref": "environment.schema.json"
+    },
+    "sessionId": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^[A-Za-z0-9_\\.\\-\\/+=]+$"
+    },
+    "eventTime": {
+      "type": "string",
+      "description": "The time of the event, as defined in https://tools.ietf.org/html/rfc3339#section-5.6",
+      "format": "date-time"
+    },
+    "platform": {
+      "title": "Platform",
+      "type": "object",
+      "properties": {
+        "userAgentString": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "browserFingerprint": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]+$"
+        },
+        "browserName": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "browserVersion": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "osName": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "osVersion": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "osVersionName": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "engineName": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "platformType": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "platformVendor": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "language": {
+          "type": "string",
+          "maxLength": 10,
+          "pattern": "^[\\(\\) A-Za-z-]{1,10}$"
+        },
+        "screenResolution": {
+          "title": "ScreenResolution",
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2147483647
+            },
+            "height": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2147483647
+            }
+          },
+          "required": [
+            "width",
+            "height"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "location": {
+      "title": "GeoLocation",
+      "type": "object",
+      "properties": {
+        "ipAddress": {
+          "anyOf": [
+            {
+              "format": "ipv4",
+              "type": "string"
+            },
+            {
+              "format": "ipv6",
+              "type": "string"
+            }
+          ]
+        },
+        "ipAddressFailure": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "accuracy": {
+          "type": "number",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "latLongFailure": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "country": {
+          "type": "string",
+          "maxLength": 10,
+          "pattern": "^[\\(\\) A-Za-z-]{1,10}$"
+        },
+        "city": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "serviceProvider": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "locationFailure": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _-]{1,64}$"
+        },
+        "timeZone": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[\\w:. _/+-]{1,64}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "messageFormatVersion",
+    "messageType",
+    "productEnvironment",
+    "productPlatform",
+    "eventTime",
+    "sessionId"
+  ],
+  "additionalProperties": false
+}

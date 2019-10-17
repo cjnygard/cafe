@@ -9,13 +9,13 @@
     "maintainer-clean": "run-s maintainer-clean:*",
     "maintainer-clean:package-lock": "rimraf package-lock.json",
     "maintainer-clean:clean": "npm run clean",
+    "maintainer-clean:node": "rimraf node_modules",
   
     "clean": "run-s clean:*",
     "clean:dist": "rimraf dist",
     "clean:tmp": "rimraf tmp",
     "clean:coverage": "rimraf coverage",
     "clean:env": "rimraf src/environments/version.ts",
-    "clean:node": "rimraf node_modules",
 
     "generate": "run-p generate:*",
     "generate:versions": "cafe-version --path .",
@@ -148,7 +148,7 @@
     "@cafe/cafe-build-utilities": "^1.0.0",
     "@cafe/cafe-model": "^1.1.2",
     "@cypress/webpack-preprocessor": "^4.1.0",
-    "@types/fingerprintjs2": "^1.5.2",
+    "@types/fingerprintjs2": "^2.0.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "2.0.6",
     "@types/node": "^12.7.8",

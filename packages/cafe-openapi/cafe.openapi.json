@@ -1599,7 +1599,7 @@
             "maxLength" : 36,
             "pattern" : "^[\\w-]+$"
           },
-          "userID" : {
+          "userId" : {
             "type" : "string",
             "minLength" : 1,
             "maxLength" : 100,

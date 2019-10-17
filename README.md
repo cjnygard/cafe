@@ -1,4 +1,10 @@
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
+[![Build Status](https://travis-ci.org/rlodge/cafe-eventing.svg?branch=master)](https://travis-ci.org/rlodge/cafe-eventing)
+[![NPM version](https://img.shields.io/npm/v/@cafe/cafe-eventing.svg)](https://www.npmjs.com/package/@cafe/cafe-eventing)
+![Downloads](https://img.shields.io/npm/dm/@cafe/cafe-eventing.svg)
+[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 # CAFe
 

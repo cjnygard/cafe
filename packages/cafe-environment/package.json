@@ -10,13 +10,13 @@
     "maintainer-clean": "run-s maintainer-clean:*",
     "maintainer-clean:package-lock": "rimraf package-lock.json",
     "maintainer-clean:clean": "npm run clean",
+    "maintainer-clean:node": "rimraf node_modules",
   
     "clean": "run-s clean:*",
     "clean:dist": "rimraf dist",
     "clean:tmp": "rimraf tmp",
     "clean:coverage": "rimraf coverage",
     "clean:env": "rimraf src/environments",
-    "clean:node": "rimraf node_modules",
   
     "generate": "run-p generate:*",
     "generate:versions": "cafe-version --path .",

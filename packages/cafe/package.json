@@ -1,0 +1,227 @@
+{
+  "name": "@cafe/cafe",
+  "version": "1.0.6",
+  "description": "A simple library for sending browser application events to a REST endpoint.",
+  "keywords": [],
+  "main": "./bundles/index.umd.js",
+  "module": "./esm6/index.js",
+  "es2015": "./esm2015/index.js",
+  "typings": "./types/index.d.ts",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cengage/cafe"
+  },
+  "author": "Ross Lodge <rlodge@concentricsky.com>",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=8.5",
+    "npm": ">=6.0"
+  },
+  "scripts": {
+    "prebuild": "run-s prebuild:*",
+    "prebuild:cleanup": "npm run clean",
+    "prebuild:verify": "npm run verify",
+
+    "prepublish": "echo No prepublish steps required",
+    "prepare": "npm run build",
+    "prerelease": "npm run build",
+
+    "postbuild": "run-p postbuild:*",
+    "postbuild:copy": "node scripts/copy",
+    "postbuild:size": "npm run size",
+  
+    "postrelease": "run-s postrelease:*",
+    "postrelease:copy": "node scripts/copy",
+    "postrelease:build": "node scripts/build",
+    "postrelease:release": "npm run release",
+
+    "postinstall": "echo No postinstall tasks",
+  
+    "maintainer-clean": "run-s maintainer-clean:*",
+    "maintainer-clean:package-lock": "rimraf package-lock.json",
+    "maintainer-clean:clean": "npm run clean",
+    "maintainer-clean:node": "rimraf node_modules",
+  
+    "clean": "run-s clean:*",
+    "clean:dist": "rimraf dist",
+    "clean:tmp": "rimraf tmp",
+    "clean:coverage": "rimraf coverage",
+    "clean:env": "rimraf src/environments",
+  
+    "validate": "run-p validate:*",
+    "validate:js": "tsc -p ./config",
+    "validate:scripts": "tsc -p ./scripts",
+  
+    "verify": "run-s verify:*",
+    "verify:validate": "npm run validate",
+    "off:verify:style": "npm run style",
+    "off:verify:test:ci": "npm run test:ci",
+  
+    "generate": "run-p generate:*",
+    "generate:versions": "cafe-version --path .",
+  
+    "build": "run-s build:*",
+    "build:clean": "npm run clean:dist",
+    "build:generate": "npm run generate",
+    "build:build": "npm run tsc:build",
+    "build:dist": "npm run dist",
+  
+    "docs": "typedoc -p . --theme minimal --target 'es5' --excludeNotExported --excludePrivate --ignoreCompilerErrors --exclude \"**/src/**/__tests__/*.*\" --out docs src/",
+  
+    "dist": "run-s dist:*",
+    "no:dist:clean": "rimraf dist",
+    "no:dist:prepare": "mkdirp dist",
+    "no:dist:copy-source": "ncp src dist",
+    "no:dist:copy-js": "cp *.js dist",
+    "dist:copy-package": "cp package.json dist",
+  
+    "deploy": "run-s deploy:*",
+    "deploy:build": "npm run build",
+    "deploy:dist": "npm run dist",
+    "deploy:publish": "npm publish dist",
+  
+    "release": "run-s release:*",
+    "release:version": "standard-version",
+    "release:github": "git push --no-verify --follow-tags origin master",
+    "release:npm": "npm publish dist",
+  
+    "e2e": "run-s e2e:test:* --continue-on-error",
+    "e2e:test:build": "npm run build",
+    "e2e:test:run": "npm run test:test",
+  
+    "test": "run-s test:*",
+    "test:generate": "npm run generate",
+    "test:test": "npm run jest",
+    "no:test:watch": "npm t -- --watch",
+    "no:test:coverage": "npm t -- --coverage",
+    "no:test:ci": "npm t -- --ci",
+  
+    "jenkins:e2e": "run-s jenkins:e2e:*",
+    "jenkins:e2e:generate": "npm run generate",
+    "jenkins:e2e:test": "npm run test:test",
+  
+    "tsc:build": "run-s tsc:build:*",
+    "tsc:build:normal": "tsc --build tsconfig.json",
+    "tsc:build:es2018": "tsc --target es2018 --outDir dist/esm2015",
+    "tsc:build:rollup": "rollup -c config/rollup.config.js",
+    "tsc:build:rollup:prod": "rollup -c config/rollup.config.js --environment NODE_ENV:production",
+    "tsc:build.trace": "tsc --traceResolution --build tsconfig.json",
+  
+    "jest": "run-s jest:*",
+    "jest:test": "jest -c ./config/jest.config.js",
+    "jest:test:coverage": "echo jest test coverage here",
+  
+    "commit": "git-cz",
+
+    "style": "run-p style:check:*",
+    "style:check:format": "npm run format -- --list-different",
+    "style:check:lint": "npm run lint",
+  
+    "style:fix": "run-s style:fix:*",
+    "style:fix:format": "npm run format:fix",
+    "style:fix:lint": "npm run lint:fix",
+
+    "format": "prettier \"**/*.{ts,tsx,js,jsx,css,scss,sass,less,md}\"",
+    "format:fix": "npm run format -- --write",
+
+    "lint": "tslint --project tsconfig.json --format codeFrame",
+    "lint:fix": "npm run lint -- --fix",
+
+    "dryrun:release:preflight": "npm pack ./dist --dry-run",
+    "size": "node scripts/file-size ./dist/bundles/index.umd.min.js ./dist/bundles/index.esm.min.js"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "lint": [
+    {"exclude":  "**/node_modules/**/*"}
+  ],
+  "lint-staged": {
+    "**/*.{ts,tsx,js,jsx,css,scss,sass,less,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "src/**/*.{ts,tsx}": [
+      "npm run lint:fix",
+      "git add"
+    ]
+  },
+  "peerDependencies": {
+    "tslib": ">=1.10.0",
+    "rxjs": "^6.5.3",
+    "bowser": "^2.7.0",
+    "fingerprintjs2": "^2.0.3",
+    "lodash": "^4.17.15",
+    "uuid": "^3.3.3",
+    "moment": "^2.24.0"
+  },
+  "dependencies": {
+    "@cafe/cafe-model": "~1.1.2"
+  },
+  "devDependencies": {
+    "@cafe/cafe-build-utilities": "~1.0.0",
+    "@commitlint/cli": "8.2.0",
+    "@commitlint/config-conventional": "8.2.0",
+    "@types/fingerprintjs2": "^2.0.0",
+    "@types/jest": "24.0.19",
+    "@types/json5": "0.0.30",
+    "@types/lodash": "4.14.141",
+    "@types/node": "^12.7.8",
+    "@types/prettier": "1.18.2",
+    "@types/shelljs": "0.8.5",
+    "@types/uuid": "^3.4.4",
+    "@types/webpack-config-utils": "2.3.0",
+    "app-root-path": "^2.2.0",
+    "bowser": "^2.6.1",
+    "brotli-size": "4.0.0",
+    "codelyzer": "^5.1.2",
+    "commitizen": "4.0.3",
+    "cross-var": "1.1.0",
+    "cz-conventional-changelog": "3.0.2",
+    "find-up": "4.1.0",
+    "fingerprintjs2": "^2.0.3",
+    "gzip-size": "5.1.1",
+    "jest": "24.9.0",
+    "jest-canvas-mock": "2.1.1",
+    "jest-watch-typeahead": "0.4.0",
+    "json-schema-to-typescript": "6.1.3",
+    "kleur": "3.0.3",
+    "lint-staged": "9.4.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "1.18.2",
+    "pretty-bytes": "5.3.0",
+    "rimraf": "^3.0.0",
+    "rollup": "1.22.0",
+    "rollup-plugin-commonjs": "10.1.0",
+    "rollup-plugin-json": "4.0.0",
+    "rollup-plugin-node-resolve": "5.2.0",
+    "rollup-plugin-replace": "2.2.0",
+    "rollup-plugin-sourcemaps": "0.4.2",
+    "rollup-plugin-terser": "5.1.2",
+    "rollup-plugin-uglify": "6.0.3",
+    "rxjs": "~6.5.3",
+    "shx": "0.3.2",
+    "standard-version": "7.0.0",
+    "sync-request": "^6.1.0",
+    "ts-jest": "24.1.0",
+    "tslib": "^1.10.0",
+    "tslint": "~5.20.0",
+    "tslint-config-prettier": "1.18.0",
+    "tslint-config-standard": "8.0.1",
+    "tslint-etc": "1.7.0",
+    "tslint-react": "4.1.0",
+    "tsutils": "3.17.1",
+    "typedoc": "0.15.0",
+    "typescript": "3.5.3",
+    "typescript-tslint-plugin": "0.5.4",
+    "uuid": "^3.3.3",
+    "webpack-config-utils": "2.3.1",
+    "xhr-mock": "2.5.0",
+    "yargs": "14.0.0"
+  }
+}

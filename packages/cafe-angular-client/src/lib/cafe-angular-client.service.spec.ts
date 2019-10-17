@@ -212,7 +212,7 @@ describe('CafeAngularClientService', () => {
     expect(record.eventId).toMatch(/[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}/);
     expect(record.eventCategory).toEqual('TEST_EVENT');
     expect(record.eventAction).toEqual('TEST_ACTION');
-    expect(record.userID).toBeUndefined();
+    expect(record.userId).toBeUndefined();
     expect(record.eventUri).toMatch(/https?:.*/);
     expect(record.tags).toEqual([]);
     expect(record.userPlatform).toBeUndefined();
@@ -259,7 +259,7 @@ describe('CafeAngularClientService', () => {
     expect(record.eventId).toMatch(/[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}/);
     expect(record.eventCategory).toEqual('TEST_EVENT');
     expect(record.eventAction).toEqual('TEST_ACTION');
-    expect(record.userID).toBeUndefined();
+    expect(record.userId).toBeUndefined();
     expect(record.eventUri).toMatch(/https?:.*/);
     expect(record.tags).toEqual([]);
     expect(record.userPlatform).toEqual('sso');
@@ -346,7 +346,7 @@ describe('CafeAngularClientService', () => {
     expect(record.eventId).toMatch(/[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}/);
     expect(record.eventCategory).toEqual('TEST_EVENT');
     expect(record.eventAction).toEqual('TEST_ACTION');
-    expect(record.userID).toBeUndefined();
+    expect(record.userId).toBeUndefined();
     expect(record.eventUri).toMatch(/.*ssoToken=REDACTED.*JWT=REDACTED.*/);
     expect(record.tags).toEqual([]);
   }));
@@ -361,7 +361,7 @@ describe('CafeAngularClientService', () => {
     const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
     const service: CafeAngularClientService = TestBed.get(CafeAngularClientService);
     service.setGlobalContext({
-      userID: 'BAR',
+      userId: 'BAR',
       tags: [
         {key: 'courseUri', value: 'ABCDEF'},
         {key: 'activityUri', value: 'GHIJKL'},
@@ -398,7 +398,7 @@ describe('CafeAngularClientService', () => {
     expect(record.eventId).toMatch(/[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}/);
     expect(record.eventCategory).toEqual('TEST_EVENT');
     expect(record.eventAction).toEqual('TEST_ACTION');
-    expect(record.userID).toEqual('BAR');
+    expect(record.userId).toEqual('BAR');
     expect(record.eventUri).toEqual('/');
     expect(record.tags.sort((a, b) => {
       if (a.key < b.key) {

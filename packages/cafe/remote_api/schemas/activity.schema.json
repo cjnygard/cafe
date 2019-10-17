@@ -1,0 +1,121 @@
+{
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Activity",
+  "properties": {
+    "messageFormatVersion": {
+      "type": "number",
+      "enum": [
+        1
+      ],
+      "default": 1
+    },
+    "messageType": {
+      "type": "string",
+      "enum": [
+        "ClientEventingActivity"
+      ],
+      "default": "ClientEventingActivity"
+    },
+    "eventTime": {
+      "type": "string",
+      "description": "The time of the event, as defined in https://tools.ietf.org/html/rfc3339#section-5.6",
+      "format": "date-time"
+    },
+    "eventDuration": {
+      "type": "number",
+      "description": "If applicable, how long the event took.",
+      "minimum": 0
+    },
+    "eventCategory": {
+      "type": "string",
+      "maxLength": 40,
+      "pattern": "^[\\w-]+$"
+    },
+    "eventAction": {
+      "type": "string",
+      "maxLength": 40,
+      "pattern": "^[\\w-]+$"
+    },
+    "productPlatform": {
+      "$ref": "productPlatform.schema.json"
+    },
+    "productEnvironment": {
+      "$ref": "environment.schema.json"
+    },
+    "userPlatform": {
+      "$ref": "userPlatform.schema.json"
+    },
+    "userEnvironment": {
+      "$ref": "environment.schema.json"
+    },
+    "hostPlatform": {
+      "$ref": "productPlatform.schema.json"
+    },
+    "hostEnvironment": {
+      "$ref": "environment.schema.json"
+    },
+    "sessionId": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^[A-Za-z0-9_\\.\\-\\/+=]+$"
+    },
+    "eventId": {
+      "type": "string",
+      "description": "A unique identifier for this activity record (NOT for the activity the user was viewing)",
+      "maxLength": 36,
+      "pattern": "^[\\w-]+$"
+    },
+    "userSSOGUID": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9:\\-{}]{1,255}$"
+    },
+    "eventUri": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048,
+      "pattern": "^(([a-zA-Z][0-9a-zA-Z+\\-\\.]*:)?/{0,2}[0-9a-zA-Z;,/?:@&=+\\.\\-_!~*'()%]+)(#[0-9a-zA-Z;,/?:@&=+\\.\\-_!~*'()%]*)?$"
+    },
+    "tags": {
+      "type": "array",
+      "description": "An array of custom tags further describing the activity, e.g. activityId or courseKey or courseCGI",
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "title": "ActivityTag",
+        "properties": {
+          "key": {
+            "type": "string",
+            "maxLength": 40,
+            "pattern": "^[\\w_-]+$"
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^[\\w; ,/?:@&=+\\.\\-_!~*'()%]+$"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "value"
+        ]
+      }
+    }
+  },
+  "required": [
+    "messageFormatVersion",
+    "messageType",
+    "eventTime",
+    "eventCategory",
+    "eventAction",
+    "productEnvironment",
+    "productPlatform",
+    "sessionId",
+    "eventId"
+  ],
+  "additionalProperties": false
+}

@@ -15,11 +15,11 @@
     "maintainer-clean": "run-s maintainer-clean:*",
     "maintainer-clean:package-lock": "rimraf package-lock.json",
     "maintainer-clean:clean": "npm run clean",
+    "maintainer-clean:node": "rimraf node_modules",
   
     "clean": "run-s clean:*",
     "clean:public": "rimraf public",
-    "clean:cache": "rimraf .cache",
-    "clean:node": "rimraf node_modules"
+    "clean:cache": "rimraf .cache"
   },
   "dependencies": {
     "@babel/plugin-proposal-export-default-from": "^7.5.2",

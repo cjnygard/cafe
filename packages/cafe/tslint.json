@@ -1,0 +1,9 @@
+{
+  "extends": "../../tslint.json",
+  "rulesDirectory": [
+    "node_modules/codelyzer"
+  ],
+  "rules": {
+    "no-unnecessary-type-assertion": false
+  }
+}

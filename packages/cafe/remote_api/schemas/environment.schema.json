@@ -1,0 +1,19 @@
+{
+    "type": "string",
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "the environment",
+    "title": "environment",
+    "enum": [
+        "production",
+        "staging",
+        "performance",
+        "load",
+        "qa",
+        "integration",
+        "develop",
+        "monitoring",
+        "demo",
+        "editorial"
+    ]
+}

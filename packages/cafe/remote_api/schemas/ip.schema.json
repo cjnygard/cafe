@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ip",
+  "properties": {
+    "ip": {
+      "anyOf": [
+        {
+          "format": "ipv4",
+          "type": "string"
+        },
+        {
+          "format": "ipv6",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "required": [
+    "ip"
+  ],
+  "additionalProperties": false
+}

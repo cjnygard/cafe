@@ -1,0 +1,7 @@
+{
+  "local": true,
+  "inputDirectory": "remote_api/schemas",
+  "modelName": "client-eventing",
+  "outputFile": "src/client-eventing-api.model.ts",
+  "namespace": "ClientEventing"
+}

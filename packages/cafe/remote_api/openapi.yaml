@@ -1,0 +1,711 @@
+---
+openapi: "3.0.0"
+info:
+  version: "1.0.12"
+  title: "cafe-eventing"
+paths:
+  /activity:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/activityRecords"
+        required: true
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        400:
+          description: "400 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        500:
+          description: "500 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      security:
+        - api_key: []
+    options:
+      responses:
+        200:
+          description: "200 Response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        400:
+          description: "400 Response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+  /log:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/logRecords"
+        required: true
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        400:
+          description: "400 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        500:
+          description: "500 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      security:
+        - api_key: []
+    options:
+      responses:
+        200:
+          description: "200 Response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        400:
+          description: "400 Response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+  /profile:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/profileRecords"
+        required: true
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        400:
+          description: "400 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        500:
+          description: "500 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      security:
+        - api_key: []
+    options:
+      responses:
+        200:
+          description: "200 Response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+        400:
+          description: "400 Response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+  /ip:
+    get:
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            X-Forwarded-For:
+              schema:
+                type: "string"
+            Cloudfront-Viewer-Country:
+              schema:
+                type: "string"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Empty"
+      security:
+        - api_key: []
+    options:
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: "string"
+            Access-Control-Allow-Methods:
+              schema:
+                type: "string"
+            Access-Control-Allow-Headers:
+              schema:
+                type: "string"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+servers:
+  - url: "http://cafe-enventing.example.com/v1"
+components:
+  securitySchemes:
+    api_key:
+      type: "apiKey"
+      name: "x-api-key"
+      in: "header"
+  schemas:
+    Empty:
+      type: "object"
+      title: "Empty Schema"
+    productPlatform:
+      type: "string"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      description: "the application name reporting the event"
+      title: "ProductPlatform"
+      enum:
+        - login
+        - profile
+        - dashboard
+        - cart
+        - catalog
+        - admin
+        - analytics
+        - analytics-portal
+    userPlatform:
+      type: "string"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      description: "the system defining the user record"
+      title: "UserPlatform"
+      enum:
+        - "sso"
+    environment:
+      type: "string"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      description: "the environment"
+      title: "environment"
+      enum:
+        - "production"
+        - "staging"
+        - "performance"
+        - "load"
+        - "qa"
+        - "integration"
+        - "develop"
+        - "monitoring"
+        - "demo"
+        - "editorial"
+    profile:
+      type: "object"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      properties:
+        messageFormatVersion:
+          type: "number"
+          enum:
+            - 1
+          default: 1
+        messageType:
+          type: "string"
+          enum:
+            - "ClientEventingProfile"
+          default: "ClientEventingProfile"
+        productPlatform:
+          $ref: "#/components/schemas/productPlatform"
+        productEnvironment:
+          $ref: "#/components/schemas/environment"
+        hostPlatform:
+          $ref: "#/components/schemas/productPlatform"
+        hostEnvironment:
+          $ref: "#/components/schemas/environment"
+        sessionId:
+          type: "string"
+          maxLength: 2048
+          pattern: "^[A-Za-z0-9_\\.\\-\\/+=]+$"
+        eventTime:
+          type: "string"
+          description: "The time of the event, as defined in https://tools.ietf.org/html/rfc3339#section-5.6"
+          format: "date-time"
+        platform:
+          title: "Platform"
+          type: "object"
+          properties:
+            userAgentString:
+              type: "string"
+              maxLength: 4096
+            browserFingerprint:
+              type: "string"
+              maxLength: 64
+              pattern: "^[0-9a-f]+$"
+            browserName:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            browserVersion:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            osName:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            osVersion:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            osVersionName:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            engineName:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            platformType:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            platformVendor:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            language:
+              type: "string"
+              maxLength: 10
+              pattern: "^[\\(\\) A-Za-z-]{1,10}$"
+            screenResolution:
+              title: "ScreenResolution"
+              type: "object"
+              properties:
+                width:
+                  type: "number"
+                  minimum: 0
+                  maximum: 2147483647
+                height:
+                  type: "number"
+                  minimum: 0
+                  maximum: 2147483647
+              required:
+                - "width"
+                - "height"
+              additionalProperties: false
+          additionalProperties: false
+        location:
+          title: "GeoLocation"
+          type: "object"
+          properties:
+            ipAddress:
+              anyOf:
+                - format: "ipv4"
+                  type: "string"
+                - format: "ipv6"
+                  type: "string"
+            ipAddressFailure:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            latitude:
+              type: "number"
+              minimum: -90
+              maximum: 90
+            longitude:
+              type: "number"
+              minimum: -180
+              maximum: 180
+            accuracy:
+              type: "number"
+              minimum: -2147483648
+              maximum: 2147483647
+            latLongFailure:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            country:
+              type: "string"
+              maxLength: 10
+              pattern: "^[\\(\\) A-Za-z-]{1,10}$"
+            city:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            serviceProvider:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            locationFailure:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _-]{1,64}$"
+            timeZone:
+              type: "string"
+              maxLength: 64
+              pattern: "^[\\w:. _/+-]{1,64}$"
+          additionalProperties: false
+      required:
+        - "messageFormatVersion"
+        - "messageType"
+        - "productEnvironment"
+        - "productPlatform"
+        - "eventTime"
+        - "sessionId"
+      additionalProperties: false
+    activity:
+      type: "object"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      properties:
+        messageFormatVersion:
+          type: "number"
+          enum:
+            - 1
+          default: 1
+        messageType:
+          type: "string"
+          enum:
+            - "ClientEventingActivity"
+          default: "ClientEventingActivity"
+        eventTime:
+          type: "string"
+          description: "The time of the event, as defined in https://tools.ietf.org/html/rfc3339#section-5.6"
+          format: "date-time"
+        eventDuration:
+          type: "number"
+          description: "If applicable, how long the event took."
+          minimum: 0
+        eventCategory:
+          type: "string"
+          maxLength: 40
+          pattern: "^[\\w-]+$"
+        eventAction:
+          type: "string"
+          maxLength: 40
+          pattern: "^[\\w-]+$"
+        productPlatform:
+          $ref: "#/components/schemas/productPlatform"
+        productEnvironment:
+          $ref: "#/components/schemas/environment"
+        userPlatform:
+          $ref: "#/components/schemas/userPlatform"
+        userEnvironment:
+          $ref: "#/components/schemas/environment"
+        hostPlatform:
+          $ref: "#/components/schemas/productPlatform"
+        hostEnvironment:
+          $ref: "#/components/schemas/environment"
+        sessionId:
+          type: "string"
+          maxLength: 2048
+          pattern: "^[A-Za-z0-9_\\.\\-\\/+=]+$"
+        eventId:
+          type: "string"
+          description: "A unique identifier for this activity record (NOT for the\
+            \ activity the user was viewing)"
+          maxLength: 36
+          pattern: "^[\\w-]+$"
+        userSSOGUID:
+          type: "string"
+          minLength: 1
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9:\\-{}]{1,255}$"
+        eventUri:
+          type: "string"
+          minLength: 1
+          maxLength: 2048
+          pattern: "^(([a-zA-Z][0-9a-zA-Z+\\-\\.]*:)?/{0,2}[0-9a-zA-Z;,/?:@&=+\\.\\\
+            -_!~*'()%]+)(#[0-9a-zA-Z;,/?:@&=+\\.\\-_!~*'()%]*)?$"
+        tags:
+          type: "array"
+          description: "An array of custom tags further describing the activity, e.g.\
+            \ activityId or courseKey or courseCGI"
+          maxItems: 15
+          items:
+            type: "object"
+            title: "ActivityTag"
+            properties:
+              key:
+                type: "string"
+                maxLength: 40
+                pattern: "^[\\w_-]+$"
+              value:
+                type: "string"
+                maxLength: 256
+                pattern: "^[\\w; ,/?:@&=+\\.\\-_!~*'()%]+$"
+            additionalProperties: false
+            required:
+              - "key"
+              - "value"
+      required:
+        - "messageFormatVersion"
+        - "messageType"
+        - "eventTime"
+        - "eventCategory"
+        - "eventAction"
+        - "productEnvironment"
+        - "productPlatform"
+        - "sessionId"
+        - "eventId"
+      additionalProperties: false
+    log:
+      type: "object"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      properties:
+        messageFormatVersion:
+          type: "number"
+          enum:
+            - 1
+          default: 1
+        messageType:
+          type: "string"
+          enum:
+            - "ClientEventingLog"
+          default: "ClientEventingLog"
+        productPlatform:
+          $ref: "#/components/schemas/productPlatform"
+        productEnvironment:
+          type: "string"
+          description: "the environment of the application reporting the event, e.g.\
+            \ staging"
+          maxLength: 60
+          pattern: "^[\\w-]+$"
+        eventUri:
+          type: "string"
+          minLength: 1
+          maxLength: 255
+          pattern: "^(([a-zA-Z][0-9a-zA-Z+\\-\\.]*:)?/{0,2}[0-9a-zA-Z;,/?:@&=+\\.\\\
+            -_!~*'()%]+)(#[0-9a-zA-Z;,/?:@&=+\\.\\-_!~*'()%]*)?$"
+        sessionId:
+          type: "string"
+          maxLength: 2048
+          pattern: "^[A-Za-z0-9_\\.\\-\\/+=]+$"
+        logTime:
+          type: "string"
+          description: "The time of the event, as defined in https://tools.ietf.org/html/rfc3339#section-5.6"
+          format: "date-time"
+        logLevel:
+          type: "string"
+          enum:
+            - "Error"
+            - "Warn"
+            - "Debug"
+            - "Info"
+          default: "Error"
+        logMessage:
+          type: "string"
+          maxLength: 20000
+          description: "The log message"
+      required:
+        - "messageFormatVersion"
+        - "productEnvironment"
+        - "productPlatform"
+        - "logLevel"
+        - "messageType"
+        - "logMessage"
+      additionalProperties: false
+    profileRecords:
+      type: "object"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      properties:
+        records:
+          type: "array"
+          minItems: 1
+          maxItems: 500
+          items:
+            $ref: "#/components/schemas/profile"
+      required:
+        - "records"
+      additionalProperties: false
+    activityRecords:
+      type: "object"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      properties:
+        records:
+          type: "array"
+          minItems: 1
+          maxItems: 500
+          items:
+            $ref: "#/components/schemas/activity"
+      required:
+        - "records"
+      additionalProperties: false
+    logRecords:
+      type: "object"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      properties:
+        records:
+          type: "array"
+          minItems: 1
+          maxItems: 500
+          items:
+            $ref: "#/components/schemas/log"
+      required:
+        - "records"
+      additionalProperties: false
+    submissionResponse:
+      type: "object"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      properties:
+        failedRequests:
+          type: "number"
+        individualStatus:
+          type: "array"
+          items:
+            type: "object"
+            title: "RecordStatus"
+            properties:
+              recordId:
+                type: "string"
+              errorMessage:
+                type: "string"
+              errorCode:
+                type: "string"
+            additionalProperties: false
+            required:
+              - "recordId"
+      required:
+        - "failedRequests"
+        - "individualStatus"
+      additionalProperties: false
+    ip:
+      type: "object"
+      definitions: {}
+      $schema: "http://json-schema.org/draft-07/schema#"
+      properties:
+        ip:
+          anyOf:
+            - format: "ipv4"
+              type: "string"
+            - format: "ipv6"
+              type: "string"
+      required:
+        - "ip"
+      additionalProperties: false

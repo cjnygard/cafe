@@ -2,5 +2,7 @@
   "packages": [
     "packages/*"
   ],
+  "command.bootstrap.ignore": [ "packages/cafe-docs" ],
+  "command.build.ignore": [ "packages/cafe-docs" ],
   "version": "0.0.0"
 }

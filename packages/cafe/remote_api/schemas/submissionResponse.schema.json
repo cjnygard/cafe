@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SubmissionResponse",
+  "properties": {
+    "failedRequests": {
+      "type": "number"
+    },
+    "individualStatus": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "title": "RecordStatus",
+        "properties": {
+          "recordId": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          },
+          "errorCode": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "recordId"
+        ]
+      }
+    }
+  },
+  "required": [
+    "failedRequests",
+    "individualStatus"
+  ],
+  "additionalProperties": false
+}
