@@ -3,10 +3,12 @@
   "version": "1.0.6",
   "description": "A simple library for sending browser application events to a REST endpoint.",
   "keywords": [],
-  "main": "./bundles/index.umd.js",
-  "module": "./esm6/index.js",
-  "es2015": "./esm2015/index.js",
-  "typings": "./types/index.d.ts",
+  "old.main": "dist/bundles/index.umd.js",
+  "old.module": "dist/esm5/index.js",
+  "es2015": "dist/esm2015/index.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "orig.typings": "./types/index.d.ts",
   "sideEffects": false,
   "repository": {
     "type": "git",
@@ -29,7 +31,7 @@
 
     "postbuild": "run-p postbuild:*",
     "postbuild:copy": "node scripts/copy",
-    "postbuild:size": "npm run size",
+    "no:postbuild:size": "npm run size",
   
     "postrelease": "run-s postrelease:*",
     "postrelease:copy": "node scripts/copy",
@@ -104,16 +106,14 @@
     "tsc:build": "run-s tsc:build:*",
     "tsc:build:normal": "tsc --build tsconfig.json",
     "tsc:build:es2018": "tsc --target es2018 --outDir dist/esm2015",
-    "tsc:build:rollup": "rollup -c config/rollup.config.js",
-    "tsc:build:rollup:prod": "rollup -c config/rollup.config.js --environment NODE_ENV:production",
+    "no:tsc:build:rollup": "rollup -c config/rollup.config.js",
+    "no:tsc:build:rollup:prod": "rollup -c config/rollup.config.js --environment NODE_ENV:production",
     "tsc:build.trace": "tsc --traceResolution --build tsconfig.json",
   
     "jest": "run-s jest:*",
     "jest:test": "jest -c ./config/jest.config.js",
     "jest:test:coverage": "echo jest test coverage here",
   
-    "commit": "git-cz",
-
     "style": "run-p style:check:*",
     "style:check:format": "npm run format -- --list-different",
     "style:check:lint": "npm run lint",
@@ -129,16 +129,8 @@
     "lint:fix": "npm run lint -- --fix",
 
     "dryrun:release:preflight": "npm pack ./dist --dry-run",
-    "size": "node scripts/file-size ./dist/bundles/index.umd.min.js ./dist/bundles/index.esm.min.js"
+    "no:size": "node scripts/file-size ./dist/bundles/index.umd.min.js ./dist/bundles/index.esm.min.js"
   },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
-  },
-  "lint": [
-    {"exclude":  "**/node_modules/**/*"}
-  ],
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx,css,scss,sass,less,md}": [
       "prettier --write",

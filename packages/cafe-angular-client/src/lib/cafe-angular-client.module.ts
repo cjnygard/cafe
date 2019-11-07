@@ -14,8 +14,9 @@
 //
 // End license text.
 
-import {ErrorHandler, ModuleWithProviders, NgModule, Provider} from '@angular/core';
-import {AngularEventingOptions, CAFE_EVENTING_CONFIGURATION, CafeAngularClientService} from './cafe-angular-client.service';
+import {ErrorHandler, ModuleWithProviders, NgModule} from '@angular/core';
+import {CAFE_EVENTING_CONFIGURATION, CafeAngularClientService} from './cafe-angular-client.service';
+import {AngularEventingOptions} from './angular-default-eventing.interface';
 import {CafeAngularClientComponent} from './cafe-angular-client.component';
 import {CafeAngularClientErrorService} from './cafe-angular-client-error.service';
 

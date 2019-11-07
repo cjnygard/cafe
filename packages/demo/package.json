@@ -182,8 +182,7 @@
     "codelyzer": "^5.1.2"
   },
   "publishConfig": {
-    "registry": "https://nexus3.cengage.info/repository/analytics-hosted-npm/"
+    "registry": "https://npmjs.org/repository/FIXME/"
   },
-  "license": "UNLICENSED",
-  "repository": "http://stash.corp.web:7990/projects/CAP/repos/cafe-client-lib/browse"
+  "license": "UNLICENSED"
 }

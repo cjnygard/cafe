@@ -17,12 +17,13 @@
 import {discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
 import {
-  AngularDefaultEventingOptions,
-  AngularEventingOptions,
   CAFE_EVENTING_CONFIGURATION,
-  CafeAngularClientService,
-  UrlSource
+  CafeAngularClientService
 } from './cafe-angular-client.service';
+import {
+  AngularEventingOptions,
+  UrlSource
+} from '@cafe/cafe-angular-config';
 import {CafeEnvironmentService} from '@cafe/cafe-environment';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -30,6 +31,7 @@ import {HttpRequest} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {Component} from '@angular/core';
 import {ClientEventing} from '@cafe/cafe-model';
+import {AngularDefaultEventingOptions} from "./angular-default-eventing.options";
 
 @Component({
   selector: 'cg-start-page',

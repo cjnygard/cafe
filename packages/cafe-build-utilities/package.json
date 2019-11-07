@@ -75,7 +75,7 @@
     "sync-request": "^6.1.0"
   },
   "publishConfig": {
-    "registry": "https://nexus3.cengage.info/repository/analytics-hosted-npm/"
+    "registry": "https://npmjs.org/repository/FIXME/"
   },
   "devDependencies": {
     "@types/jasmine": "~2.8.8",

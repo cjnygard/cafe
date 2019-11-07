@@ -4,7 +4,11 @@
     "./src"
   ],
   "compilerOptions": {
-    "outDir": "./dist/esm5",
+    "outDir": "./dist",
     "esModuleInterop": true
+  },
+  "oldcompilerOptions": {
+    "outDir": "./dist/esm5",
+    "allowSyntheticDefaultImports": true
   }
 }

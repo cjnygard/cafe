@@ -18,12 +18,8 @@
  * Public API Surface of cafe-angular-client
  */
 
-export * from './lib/cafe-angular-client.service';
-export * from './lib/cafe-angular-client.component';
-export * from './lib/cafe-angular-client.module';
-export {
-  AngularDefaultEventingConfiguration
-}from './lib/angular-default-eventing.configuration';
-export {
-  AngularDefaultEventingOptions
-}from './lib/angular-default-eventing.options';
+export * from './lib/required-test.options';
+export * from './lib/angular-default-eventing.interface';
+export * from './lib/cafe-required-test.options';
+// export { AngularDefaultEventingConfiguration } from './lib/angular-default-eventing.configuration';
+// export { AngularDefaultEventingOptions } from './lib/angular-default-eventing.options';

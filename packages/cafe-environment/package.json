@@ -87,6 +87,10 @@
     "dist"
   ],
   "devDependencies": {
+    "@angular/common": "^8.2.8",
+    "@angular/core": "^8.2.8",
+    "@angular/router": "^8.2.8",
+    "@angular/platform-browser-dynamic": "^8.2.8",
     "@cafe/cafe-build-utilities": "^1.0.0",
     "mkdirp": "^0.5.1",
     "ncp": "^2.0.0",
@@ -97,13 +101,12 @@
     "codelyzer": "^5.1.2"
   },
   "peerDependencies": {
-    "@angular/common": "^8.2.8",
-    "@angular/core": "^8.2.8"
   },
   "publishConfig": {
-    "registry": "https://nexus3.cengage.info/repository/analytics-hosted-npm/"
+    "registry": "https://npmjs.org/repository/FIXME/"
   },
   "dependencies": {
-    "@angular/core": "^8.2.8"
+    "@angular/core": "^8.2.8",
+    "@angular/platform-browser": "^8.2.8"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "cafe-docs",
+  "name": "@cafe/cafe-docs",
   "private": true,
   "description": "Documentation, built with gatsby-gitbook-boilerplate",
   "author": "Carl Nygard <cjnygard@gmail.com>",

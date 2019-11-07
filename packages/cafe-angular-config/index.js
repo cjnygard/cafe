@@ -14,16 +14,4 @@
 //
 // End license text.
 
-/*
- * Public API Surface of cafe-angular-client
- */
-
-export * from './lib/cafe-angular-client.service';
-export * from './lib/cafe-angular-client.component';
-export * from './lib/cafe-angular-client.module';
-export {
-  AngularDefaultEventingConfiguration
-}from './lib/angular-default-eventing.configuration';
-export {
-  AngularDefaultEventingOptions
-}from './lib/angular-default-eventing.options';
+module.exports = '@cafe/cafe-angular-config';

@@ -14,16 +14,21 @@
 //
 // End license text.
 
+
 /*
- * Public API Surface of cafe-angular-client
+ * If you make changes to these interfaces,, you need to make corresponding changes to RequiredEventingOptions,
+ * and to DefaultEventingConfiguration.  Also a new parameter to AngularDefaultEventingOptions and a new getter
+ * in that class
  */
 
-export * from './lib/cafe-angular-client.service';
-export * from './lib/cafe-angular-client.component';
-export * from './lib/cafe-angular-client.module';
-export {
-  AngularDefaultEventingConfiguration
-}from './lib/angular-default-eventing.configuration';
-export {
-  AngularDefaultEventingOptions
-}from './lib/angular-default-eventing.options';
+export interface TestOptions {
+  readonly apiKey?: string;
+  readonly bufferInterval?: number;
+}
+
+
+export interface OldRequiredTestOptions extends TestOptions {
+  readonly maxBufferSize?: number;
+}
+
+

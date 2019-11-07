@@ -14,16 +14,16 @@
 //
 // End license text.
 
-/*
- * Public API Surface of cafe-angular-client
- */
 
-export * from './lib/cafe-angular-client.service';
-export * from './lib/cafe-angular-client.component';
-export * from './lib/cafe-angular-client.module';
-export {
-  AngularDefaultEventingConfiguration
-}from './lib/angular-default-eventing.configuration';
-export {
-  AngularDefaultEventingOptions
-}from './lib/angular-default-eventing.options';
+export class CafeDefaultProviders {
+  static defaultUrlScrubber(urlToSend: string) {
+    const maxUrlLength = 255;
+
+    return urlToSend.replace(new RegExp('(\\w*(?:token|jwt))=[^&]+', 'ig'), '$1=REDACTED').substring(0, maxUrlLength);
+  }
+
+  static defaultUrlProvider() {
+    return (window as Window).location.href;
+  }
+}
+
