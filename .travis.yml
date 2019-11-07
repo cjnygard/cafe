@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - '10'
+notifications:
+  email: false
+env:
+  - CI=true
+before_install:
+  - npm config set scripts-prepend-node-path true
+install:
+  - npm install
+script:
+  - npm run build
